@@ -1,4 +1,5 @@
 var fs = require('fs')
+var request = require('request')
 const express = require('express')
 const app = express()	
 
@@ -19,10 +20,13 @@ app.get('/professionalCandlesticksChart', function (req, res) {
 app.get('/getTick', function(req, res){
 	
 	var obj;
-	fs.readFile(__dirname + '/getHistoryUSFuturesTick.json', 'utf8', function (err, data) {
-		if (err) throw err;
-		obj = JSON.parse(data);
-		res.json(obj)
+	var url = 'http://www.barchartmarketdata.com/data-samples/getHistoryUSFuturesTick.json';
+	
+	request.get(url, function(error, response, body){
+		if (!error && response.statusCode == 200) {
+			obj = JSON.parse(body);
+			res.json(obj);
+		}
 	});
 	
 })
@@ -31,10 +35,13 @@ app.get('/getTick', function(req, res){
 app.get('/getEOD', function(req, res){
 	
 	var obj;
-	fs.readFile(__dirname + '/getHistoryUSFuturesEOD.json', 'utf8', function (err, data) {
-		if (err) throw err;
-		obj = JSON.parse(data);
-		res.json(obj)
+	var url = 'http://www.barchartmarketdata.com/data-samples/getHistoryUSFuturesEOD.json';
+	
+	request.get(url, function(error, response, body){
+		if (!error && response.statusCode == 200) {
+			obj = JSON.parse(body);
+			res.json(obj);
+		}
 	});
 	
 })
