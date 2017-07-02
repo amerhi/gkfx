@@ -1,44 +1,52 @@
-var fs = require('fs')
-const express = require('express')
-const app = express()	
+var fs = require('fs');
+var request = require('request');
+const express = require('express');
+const app = express();
 
 
-app.get('/', function (req, res) {
-	res.sendFile(__dirname + "/index.html")});
+app.get('/', function(req, res){
+	res.sendFile(__dirname + "/index.html");
+});
 
-app.get('/dateBasedDataChart', function (req, res) {
+app.get('/dateBasedDataChart', function(req, res){
 	res.sendFile(__dirname + '/dateBasedDataChart.html');
-})
+});
 
-app.get('/professionalCandlesticksChart', function (req, res) {
+app.get('/professionalCandlesticksChart', function(req, res){
 	res.sendFile(__dirname + '/professionalCandlesticks.html');
-})
+});
 
 
-// Api #1:
+// Api #1: Get US history futures tick
 app.get('/getTick', function(req, res){
 	
 	var obj;
-	fs.readFile(__dirname + '/getHistoryUSFuturesTick.json', 'utf8', function (err, data) {
-		if (err) throw err;
-		obj = JSON.parse(data);
-		res.json(obj)
+	var url = 'http://www.barchartmarketdata.com/data-samples/getHistoryUSFuturesTick.json';
+	
+	request.get(url, function(error, response, body){
+		if(!error && response.statusCode == 200){
+			obj = JSON.parse(body);
+			res.json(obj);
+		}
 	});
 	
-})
+});
 
-// API #2:
+// API #2: Get US history futures EOD
 app.get('/getEOD', function(req, res){
 	
 	var obj;
-	fs.readFile(__dirname + '/getHistoryUSFuturesEOD.json', 'utf8', function (err, data) {
-		if (err) throw err;
-		obj = JSON.parse(data);
-		res.json(obj)
+	var url = 'http://www.barchartmarketdata.com/data-samples/getHistoryUSFuturesEOD.json';
+	
+	request.get(url, function(error, response, body){
+		if(!error && response.statusCode == 200){
+			obj = JSON.parse(body);
+			res.json(obj);
+		}
 	});
 	
-})
+});
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
-})
+app.listen(3000, function(){
+	console.log('Example app listening on port 3000!');
+});
